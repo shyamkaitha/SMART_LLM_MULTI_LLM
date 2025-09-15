@@ -9,7 +9,10 @@ task_over = True
 time.sleep(5)
 
 
-exec = float(success_exec) / float(total_exec)
+if total_exec == 0:
+    exec = 0.0
+else:
+    exec = float(success_exec) / float(total_exec)
 
 print (ground_truth)
 objs = list([obj for obj in c.last_event.metadata["objects"]])
@@ -22,42 +25,44 @@ for obj_gt in ground_truth:
     contains = obj_gt['contains']
     gcr_tasks += 1
     for obj in objs:
-        # if obj_name in obj["name"]:
-        #     print (obj)
         if state == 'SLICED':
-            if obj_name in obj["name"] and obj["isSliced"]:
+            if obj_name.lower() in obj["name"].lower() and obj["isSliced"]:
                 gcr_complete += 1 
                 
         if state == 'OFF':
-            if obj_name in obj["name"] and not obj["isToggled"]:
+            if obj_name.lower() in obj["name"].lower() and not obj["isToggled"]:
                 gcr_complete += 1 
         
         if state == 'ON':
-            if obj_name in obj["name"] and obj["isToggled"]:
+            if obj_name.lower() in obj["name"].lower() and obj["isToggled"]:
                 gcr_complete += 1 
         
         if state == 'HOT':
             # print (obj)
-            if obj_name in obj["name"] and obj["temperature"] == 'Hot':
+            if obj_name.lower() in obj["name"].lower() and obj["temperature"] == 'Hot':
                 gcr_complete += 1 
                 
         if state == 'COOKED':
-            if obj_name in obj["name"] and obj["isCooked"]:
+            if obj_name.lower() in obj["name"].lower() and obj["isCooked"]:
                 gcr_complete += 1 
                 
         if state == 'OPENED':
-            if obj_name in obj["name"] and obj["isOpen"]:
+            if obj_name.lower() in obj["name"].lower() and obj["isOpen"]:
                 gcr_complete += 1 
                 
         if state == 'CLOSED':
-            if obj_name in obj["name"] and not obj["isOpen"]:
+            if obj_name.lower() in obj["name"].lower() and not obj["isOpen"]:
                 gcr_complete += 1 
                 
         if state == 'PICKED':
-            if obj_name in obj["name"] and obj["isPickedUp"]:
+            if obj_name.lower() in obj["name"].lower() and obj["isPickedUp"]:
                 gcr_complete += 1 
         
-        if len(contains) != 0 and obj_name in obj["name"]:
+        if state == 'BROKEN':
+            if obj_name.lower() in obj["name"].lower() and obj["isBroken"]:
+                gcr_complete += 1 
+        
+        if len(contains) != 0 and obj_name.lower() in obj["name"].lower():
             print (contains, obj_name, obj["name"])   
             for rec in contains:
                 if obj['receptacleObjectIds'] is not None:

@@ -219,7 +219,7 @@ def pick_up_fork(robot_list):
     # 2: Pick up the Fork using robot1 and robot2 togethor.
     PickupObject(robot_list,'Fork')
 
-def throw_fork_in_trash():
+def throw_fork_in_trash(robot_list):
     # robot_list = [robot1,robot3]
     # 0: SubTask 2: Throw the Fork in the Trash
     # 1: Go to the GarbageCan using robot1 and robot3 togethor.
@@ -234,3 +234,80 @@ pick_up_fork([robots[0],robots[1]])
 throw_fork_in_trash([robots[0],robots[2]])
 
 # Task throw the fork in the trash is done
+
+
+# EXAMPLE 5 - Task Description: Break a vase and turn on the TV
+# GENERAL TASK DECOMPOSITION
+# Independent subtasks:
+# SubTask 1: Break a vase. (Skills Required: GoToObject, BreakObject)
+# SubTask 2: Turn on the TV. (Skills Required: GoToObject, SwitchOn)
+# We can perform SubTask 1 and SubTask 2 in parallel.
+
+# CODE
+def break_vase():
+    # 0: SubTask 1: Break a vase
+    # 1: Go to the Vase.
+    GoToObject('Vase')
+    # 2: Break the Vase.
+    BreakObject('Vase')
+
+def turn_on_tv():
+    # 0: SubTask 2: Turn on the TV
+    # 1: Go to the Television.
+    GoToObject('Television')
+    # 2: Switch on the Television.
+    SwitchOn('Television')
+
+# Parallelize SubTask 1 and SubTask 2
+task1_thread = threading.Thread(target=break_vase)
+task2_thread = threading.Thread(target=turn_on_tv)
+
+# Start executing SubTask 1 and SubTask 2 in parallel
+task1_thread.start()
+task2_thread.start()
+
+# Wait for both SubTask 1 and SubTask 2 to finish
+task1_thread.join()
+task2_thread.join()
+
+# Task Break a vase and turn on the TV is done
+
+# TASK ALLOCATION
+robots = [{'name': 'robot1', 'skills': ['GoToObject', 'OpenObject', 'CloseObject', 'BreakObject', 'SliceObject', 'PickupObject', 'PutObject', 'SwitchOn', 'SwitchOff', 'DropHandObject', 'ThrowObject', 'PushObject', 'PullObject'],'mass': 100}, {'name': 'robot2', 'skills': ['GoToObject', 'OpenObject', 'CloseObject', 'BreakObject', 'SliceObject', 'PickupObject', 'PutObject', 'SwitchOn', 'SwitchOff', 'DropHandObject', 'ThrowObject', 'PushObject', 'PullObject'],'mass': 100}, {'name': 'robot3', 'skills': ['GoToObject', 'OpenObject', 'CloseObject', 'BreakObject', 'SliceObject', 'PickupObject', 'PutObject', 'SwitchOn', 'SwitchOff', 'DropHandObject', 'ThrowObject', 'PushObject', 'PullObject'],'mass': 100}]
+# SOLUTION
+# All robots have the same skills and sufficient mass capacity. Focus on optimal task allocation.
+# For the 'Break a vase' subtask, it requires 'GoToObject' and 'BreakObject' skills. Robot 1 has all these skills.
+# For the 'Turn on the TV' subtask, it requires 'GoToObject' and 'SwitchOn' skills. Robot 2 has all these skills.
+# No teams are required since subtasks can be performed with individual robots. Assign 'Break a vase' to Robot 1 and 'Turn on the TV' to Robot 2.
+# Both subtasks can be performed in parallel since they are independent.
+
+# CODE Solution
+def break_vase(robot_list):
+    # robot_list = [robot1]
+    # 0: SubTask 1: Break a vase
+    # 1: Go to the Vase using robot1.
+    GoToObject(robot_list[0],'Vase')
+    # 2: Break the Vase using robot1.
+    BreakObject(robot_list[0],'Vase')
+
+def turn_on_tv(robot_list):
+    # robot_list = [robot2]
+    # 0: SubTask 2: Turn on the TV
+    # 1: Go to the Television using robot2.
+    GoToObject(robot_list[0],'Television')
+    # 2: Switch on the Television using robot2.
+    SwitchOn(robot_list[0],'Television')
+
+# Parallelize SubTask 1 and SubTask 2
+task1_thread = threading.Thread(target=break_vase, args=([robots[0]],))
+task2_thread = threading.Thread(target=turn_on_tv, args=([robots[1]],))
+
+# Start executing SubTask 1 and SubTask 2 in parallel
+task1_thread.start()
+task2_thread.start()
+
+# Wait for both SubTask 1 and SubTask 2 to finish
+task1_thread.join()
+task2_thread.join()
+
+# Task Break a vase and turn on the TV is done

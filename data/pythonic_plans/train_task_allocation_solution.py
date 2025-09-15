@@ -130,4 +130,54 @@ objects = [{'name': 'SaltShaker', 'mass': 1.0}, {'name': 'SoapBottle', 'mass': 5
 # Analyze the mass required for each object being PickedUp by the 'PickupObject' skill, and the mass capacity each robot possesses. In this scenario, we have two main subtasks: 'Throw the Fork in the trash' and 'Throw the Spoon in the trash'.
 # For the 'Throw the Fork in the trash' subtask, mass of the Fork is 4.8. Hence the subtask can be performed by any robot with mass capacity greater than or equal to 4.8. However, no individual robot has mass capacity of 4.8. This is a mass gap that needs to be addressed. Form a team of robots. The combined mass capacity of the team must be greater than or equal to 4.8. Team of Robots 1 and 2 have the mass capacity required.
 # For the 'Throw the Spoon in the trash' subtask, mass of the Spoon is 2.0. Hence the subtask can be performed by any robot with mass capacity greater than or equal to 2.0. In this case, Robots 3 has a mass capacity = 2.0.
-# Teams are required since SubTasks can't be performed with individual robots as explained above. The 'Throw the Fork in the trash' subtask is assigned to team of Robots 1 and 2. The 'Throw the Spoon in the trash' subtask is assigned to Robots 3. 
+# Teams are required since SubTasks can't be performed with individual robots as explained above. The 'Throw the Fork in the trash' subtask is assigned to team of Robots 1 and 2. The 'Throw the Spoon in the trash' subtask is assigned to Robots 3.
+
+
+
+# EXAMPLE 4 - Task Description: Break a vase and turn on the TV
+# GENERAL TASK DECOMPOSITION
+# Independent subtasks:
+# SubTask 1: Break a vase. (Skills Required: GoToObject, BreakObject)
+# SubTask 2: Turn on the TV. (Skills Required: GoToObject, SwitchOn)
+# We can perform SubTask 1 and SubTask 2 in parallel.
+
+# CODE
+def break_vase():
+    # 0: SubTask 1: Break a vase
+    # 1: Go to the Vase.
+    GoToObject('Vase')
+    # 2: Break the Vase.
+    BreakObject('Vase')
+
+def turn_on_tv():
+    # 0: SubTask 2: Turn on the TV
+    # 1: Go to the Television.
+    GoToObject('Television')
+    # 2: Switch on the Television.
+    SwitchOn('Television')
+
+# Parallelize SubTask 1 and SubTask 2
+task1_thread = threading.Thread(target=break_vase)
+task2_thread = threading.Thread(target=turn_on_tv)
+
+# Start executing SubTask 1 and SubTask 2 in parallel
+task1_thread.start()
+task2_thread.start()
+
+# Wait for both SubTask 1 and SubTask 2 to finish
+task1_thread.join()
+task2_thread.join()
+
+# Task Break a vase and turn on the TV is done
+
+# TASK ALLOCATION
+# Scenario: There are 3 robots available. The task should be performed using the minimum number of robots necessary. Robots should be assigned to subtasks that match its skills and mass capacity.
+robots = [{'name': 'robot1', 'skills': ['GoToObject', 'OpenObject', 'CloseObject', 'BreakObject', 'SliceObject', 'PickupObject', 'PutObject', 'SwitchOn', 'SwitchOff', 'DropHandObject', 'ThrowObject', 'PushObject', 'PullObject'],'mass': 100}, {'name': 'robot2', 'skills': ['GoToObject', 'OpenObject', 'CloseObject', 'BreakObject', 'SliceObject', 'PickupObject', 'PutObject', 'SwitchOn', 'SwitchOff', 'DropHandObject', 'ThrowObject', 'PushObject', 'PullObject'],'mass': 100}, {'name': 'robot3', 'skills': ['GoToObject', 'OpenObject', 'CloseObject', 'BreakObject', 'SliceObject', 'PickupObject', 'PutObject', 'SwitchOn', 'SwitchOff', 'DropHandObject', 'ThrowObject', 'PushObject', 'PullObject'],'mass': 100}]
+objects = [{'name': 'Vase', 'mass': 1}, {'name': 'Television', 'mass': 10}]
+
+# SOLUTION
+# All robots have the same skills and sufficient mass capacity. Focus on optimal task allocation.
+# For the 'Break a vase' subtask, it requires 'GoToObject' and 'BreakObject' skills. Robot 1 has all these skills.
+# For the 'Turn on the TV' subtask, it requires 'GoToObject' and 'SwitchOn' skills. Robot 2 has all these skills.
+# No teams are required since subtasks can be performed with individual robots. Assign 'Break a vase' to Robot 1 and 'Turn on the TV' to Robot 2.
+# Both subtasks can be performed in parallel since they are independent. 
