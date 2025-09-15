@@ -207,8 +207,11 @@ def GoToObject(robots, dest_obj):
         pos_arr = dest_obj_id.split("|")
         dest_obj_center = {'x': float(pos_arr[1]), 'y': float(pos_arr[2]), 'z': float(pos_arr[3])}
     else:
+    # Initialize variables before the loop
+        dest_obj_id = None
+        dest_obj_center = None
+        
         for idx, obj in enumerate(objs):
-            
             match = re.match(dest_obj, obj)
             if match is not None:
                 dest_obj_id = obj
@@ -216,6 +219,15 @@ def GoToObject(robots, dest_obj):
                 if dest_obj_center != {'x': 0.0, 'y': 0.0, 'z': 0.0}:
                     break # find the first instance
         
+        # Check if object was found
+        if dest_obj_id is None or dest_obj_center is None:
+            print(f"Error: Object '{dest_obj}' not found in scene")
+            print(f"Available objects containing 'trash', 'garbage', or 'can':")
+            for obj in objs:
+                if any(word in obj.lower() for word in ['trash', 'garbage', 'can', 'bin']):
+                    print(f"  - {obj}")
+            return
+            
     print ("Going to ", dest_obj_id, dest_obj_center)
         
     dest_obj_pos = [dest_obj_center['x'], dest_obj_center['y'], dest_obj_center['z']] 

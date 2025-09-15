@@ -8,9 +8,12 @@ from datetime import datetime
 import random
 import subprocess
 
-import openai
+from openai import OpenAI
 import ai2thor.controller
+from pathlib import Path
 
+# Global client variable
+client = None
 import sys
 sys.path.append(".")
 
@@ -18,30 +21,35 @@ import resources.actions as actions
 import resources.robots as robots
 
 
+
 def LM(prompt, gpt_version, max_tokens=128, temperature=0, stop=None, logprobs=1, frequency_penalty=0):
+    global client
     
     if "gpt" not in gpt_version:
-        response = openai.Completion.create(model=gpt_version, 
-                                            prompt=prompt, 
-                                            max_tokens=max_tokens, 
-                                            temperature=temperature, 
-                                            stop=stop, 
-                                            logprobs=logprobs, 
-                                            frequency_penalty = frequency_penalty)
-        
-        return response, response["choices"][0]["text"].strip()
+        response = client.completions.create(
+            model=gpt_version, 
+            prompt=prompt, 
+            max_tokens=max_tokens, 
+            temperature=temperature, 
+            stop=stop, 
+            frequency_penalty=frequency_penalty
+        )
+        return response, response.choices[0].text.strip()
     
     else:
-        response = openai.ChatCompletion.create(model=gpt_version, 
-                                            messages=prompt, 
-                                            max_tokens=max_tokens, 
-                                            temperature=temperature, 
-                                            frequency_penalty = frequency_penalty)
-        
-        return response, response["choices"][0]["message"]["content"].strip()
+        response = client.chat.completions.create(
+            model=gpt_version, 
+            messages=prompt, 
+            max_tokens=max_tokens, 
+            temperature=temperature, 
+            frequency_penalty=frequency_penalty
+        )
+        return response, response.choices[0].message.content.strip()
 
 def set_api_key(openai_api_key):
-    openai.api_key = Path(openai_api_key + '.txt').read_text()
+    global client
+    api_key = Path(openai_api_key + '.txt').read_text().strip()
+    client = OpenAI(api_key=api_key)
 
 # Function returns object list with name and properties.
 def convert_to_dict_objprop(objs, obj_mass):

@@ -1,3 +1,4 @@
+
 # EXAMPLE 1 - Task Description: Wash the fork. 
 # GENERAL TASK DECOMPOSITION
 # Independent subtasks:
@@ -311,3 +312,4 @@ task1_thread.join()
 task2_thread.join()
 
 # Task Break a vase and turn on the TV is done
+

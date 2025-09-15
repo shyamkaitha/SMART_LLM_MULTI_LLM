@@ -153,6 +153,7 @@ actions_thread = threading.Thread(target=exec_actions)
 actions_thread.start()
 
 def GoToObject(robots, dest_obj):
+    print("USING FIXED VERSION OF GoToObject")
     print ("Going to ", dest_obj)
     # check if robots is a list
     
@@ -171,15 +172,28 @@ def GoToObject(robots, dest_obj):
     objs_center = list([obj["axisAlignedBoundingBox"]["center"] for obj in c.last_event.metadata["objects"]])
 
     # look for the location and id of the destination object
+    # look for the location and id of the destination object
+    dest_obj_id = None
+    dest_obj_center = None
+
     for idx, obj in enumerate(objs):
         match = re.match(dest_obj, obj)
         if match is not None:
             dest_obj_id = obj
             dest_obj_center = objs_center[idx]
             break # find the first instance
-        
+
+    # Check if object was found
+    if dest_obj_id is None or dest_obj_center is None:
+        print(f"Error: Object '{dest_obj}' not found in scene")
+        print(f"Available objects containing 'trash', 'garbage', or 'can':")
+        for obj in objs:
+            if any(word in obj.lower() for word in ['trash', 'garbage', 'can', 'bin']):
+                print(f"  - {obj}")
+        return
+
     dest_obj_pos = [dest_obj_center['x'], dest_obj_center['y'], dest_obj_center['z']] 
-    
+        
     # closest reachable position for each robot
     # all robots cannot reach the same spot 
     # differt close points needs to be found for each robot
@@ -374,6 +388,22 @@ def CleanObject(robot, sw_obj):
             break # find the first instance
 
     action_queue.append({'action':'CleanObject', 'objectId':sw_obj_id, 'agent_id':agent_id}) 
+
+
+
+def ThrowObject(robot, sw_obj, receptacle=None):
+    robot_name = robot['name']
+    agent_id = int(robot_name[-1]) - 1
+    objs = list(set([obj["objectId"] for obj in c.last_event.metadata["objects"]]))
+
+    for obj in objs:
+        match = re.match(sw_obj, obj)
+        if match is not None:
+            sw_obj_id = obj
+            break # find the first instance
+    
+    action_queue.append({'action':'ThrowObject', 'objectId':sw_obj_id, 'agent_id':agent_id}) 
+    time.sleep(1)
  
 # LLM Generated Code
  
