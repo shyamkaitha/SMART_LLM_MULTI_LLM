@@ -4,6 +4,7 @@ logs/
 
 # API keys and sensitive files
 api_key.txt
+claude_api_key.txt
 *.key
 
 # Python cache

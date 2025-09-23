@@ -29,7 +29,15 @@ def distance_pts(p1: Tuple[float, float, float], p2: Tuple[float, float, float])
 def generate_video():
     frame_rate = 5
     # input_path, prefix, char_id=0, image_synthesis=['normal'], frame_rate=5
-    cur_path = os.path.dirname(__file__) + "/*/"
+    
+    # Handle __file__ not being available in subprocess execution
+    try:
+        base_dir = os.path.dirname(__file__)
+    except NameError:
+        # __file__ not available, use fallback to data/aithor_connect directory
+        base_dir = os.path.join(os.getcwd(), 'data', 'aithor_connect')
+    
+    cur_path = base_dir + "/*/"
     for imgs_folder in glob(cur_path, recursive = False):
         view = imgs_folder.split('/')[-2]
         if not os.path.isdir(imgs_folder):
@@ -39,7 +47,7 @@ def generate_video():
                                 '{}/img_%05d.png'.format(imgs_folder), 
                                 '-framerate', str(frame_rate),
                                 '-pix_fmt', 'yuv420p',
-                                '{}/video_{}.mp4'.format(os.path.dirname(__file__), view)]
+                                '{}/video_{}.mp4'.format(base_dir, view)]
             subprocess.call(command_set)
         
 

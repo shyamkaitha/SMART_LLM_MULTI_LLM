@@ -61,6 +61,14 @@ for obj_gt in ground_truth:
         if state == 'BROKEN':
             if obj_name.lower() in obj["name"].lower() and obj["isBroken"]:
                 gcr_complete += 1 
+                
+        if state == 'CLEAN':
+            if obj_name.lower() in obj["name"].lower() and obj["isDirty"] == False:
+                gcr_complete += 1 
+                
+        if state == 'FILLED':
+            if obj_name.lower() in obj["name"].lower() and obj["isFilledWithLiquid"]:
+                gcr_complete += 1 
         
         if len(contains) != 0 and obj_name.lower() in obj["name"].lower():
             print (contains, obj_name, obj["name"])   

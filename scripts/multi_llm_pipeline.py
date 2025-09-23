@@ -143,28 +143,26 @@ class MultiLLMPipeline:
         """Stage 3: Code Generation using specialized LLM"""
         print("Stage 3: Code Generation...")
         
-        prompt = f"from skills import {actions.ai2thor_actions}\n"
-        prompt += "import time\nimport threading\n"
-        
-        # Reduce objects to just names for code generation
-        object_names = [obj['name'] for obj in objects]
-        prompt += f"object_types = {object_names}\n\n"
-        
-        # Include only a subset of examples for code generation
+        # PRIORITY: Training examples FIRST - LLM learns from patterns
         example_lines = examples.split('\n')
-        # Take first 150 lines of examples for code generation
-        short_examples = '\n'.join(example_lines[:150])
-        prompt += short_examples + "\n\n"
+        # Use ALL clean examples (88 lines) - they're already minimal and perfect
+        prompt = '\n'.join(example_lines) + "\n\n"
         
-        prompt += decomposed_plan
-        prompt += "\n# TASK ALLOCATION\n"
-        prompt += f"robots = {available_robots}\n"
-        prompt += allocation_plan
-        prompt += "\n# CODE Solution\n"
+        # Add only essential context
+        prompt += "# FOLLOW THE PATTERNS ABOVE EXACTLY - NO DEVIATIONS\n"
+        prompt += "# Robot parameter FIRST: GoToObject(robot, 'Object')\n"
+        prompt += "# Function signature: def task_name(robot):\n"
+        prompt += "# Execution: task_name(robots[0])\n\n"
+        
+        # Add current task context
+        prompt += f"# NEW TASK TO SOLVE:\n{decomposed_plan}\n"
+        prompt += f"# AVAILABLE ROBOTS: {available_robots}\n"
+        prompt += f"# ALLOCATION: {allocation_plan}\n"
+        prompt += "# GENERATE CODE FOLLOWING THE EXACT PATTERNS ABOVE:\n"
         
         # Use same max_tokens as original framework (1400 for code generation)
         _, code_plan = self.codegen_llm.call_llm(
-            prompt, max_tokens=1400, frequency_penalty=0.4
+            prompt, max_tokens=1000, frequency_penalty=0.8
         )
         
         return code_plan

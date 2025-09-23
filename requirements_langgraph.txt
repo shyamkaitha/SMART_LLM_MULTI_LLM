@@ -1,0 +1,14 @@
+# LangGraph SMART-LLM Pipeline Dependencies
+# Add these to your existing environment
+
+langchain-openai>=0.1.0
+langgraph>=0.1.0  
+langchain-core>=0.2.0
+typing-extensions>=4.5.0
+
+# These should already be installed from the original framework:
+# openai
+# ai2thor
+# opencv-python
+# numpy
+# scipy

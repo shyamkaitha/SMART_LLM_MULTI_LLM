@@ -237,7 +237,7 @@ def GoToObject(robots, dest_obj):
     # differt close points needs to be found for each robot
     crp = closest_node(dest_obj_pos, reachable_positions, no_agents, clost_node_location)
     
-    goal_thresh = 0.25
+    goal_thresh = 0.75
     # at least one robot is far away from the goal
     
     while all(d > goal_thresh for d in dist_goals):

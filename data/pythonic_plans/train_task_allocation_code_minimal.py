@@ -2,16 +2,17 @@
 
 # Task: Throw the Spatula in the trash
 def throw_spatula_in_trash(robot):
+    # 0: SubTask 1: Throw the Spatula in the trash
     # 1: Go to the Spatula using robot.
-    GoToObject(robot, 'Spatula')
+    GoToObject(robot,'Spatula')
     # 2: Pick up the Spatula using robot.
-    PickupObject(robot, 'Spatula')
+    PickupObject(robot,'Spatula')
     # 3: Go to the GarbageCan using robot.
-    GoToObject(robot, 'GarbageCan')
-    # 4: Throw the Spatula using robot.
-    ThrowObject(robot, 'Spatula')
+    GoToObject(robot,'GarbageCan')
+    # 4: Throw the Spatula in the GarbageCan using robot.
+    ThrowObject(robot,'Spatula')
 
-# Execute task with robot1
+# Execute SubTask 1 with robot1
 throw_spatula_in_trash(robots[0])
 
 # Task: Slice the tomato
@@ -30,8 +31,9 @@ def slice_tomato(robot):
 # Assign the task to robot1
 slice_tomato(robots[0])
 
-# Task: Wash the lettuce and place lettuce on the Countertop  
-def wash_lettuce_and_place_on_countertop(robot):
+# Task: Wash the lettuce and place lettuce on the Countertop
+def wash_lettuce_and_handoff(robot):
+    # 0: SubTask 1: Wash the Lettuce and prepare for handoff
     # 1: Go to the Lettuce using robot.
     GoToObject(robot, 'Lettuce')
     # 2: Pick up the Lettuce using robot.
@@ -48,13 +50,13 @@ def wash_lettuce_and_place_on_countertop(robot):
     SwitchOff(robot, 'Faucet')
     # 8: Pick up the clean Lettuce using robot.
     PickupObject(robot, 'Lettuce')
-    # 9: Go to the CounterTop using robot.
+    # 9: Go to the CounterTop for handoff using robot.
     GoToObject(robot, 'CounterTop')
     # 10: Place the Lettuce on the CounterTop using robot
     PutObject(robot, 'Lettuce', 'CounterTop')
 
-# Execute complete task with Robot1
-wash_lettuce_and_place_on_countertop(robots[0])
+# Execute SubTask 1 with Robot1 (handles full task in single robot)
+wash_lettuce_and_handoff(robots[0])
 
 # Task: Simple object interaction
 def simple_task(robot):
@@ -83,3 +85,5 @@ def break_task(robot):
 
 # Execute break task
 break_task(robots[0])
+
+

@@ -101,7 +101,7 @@ def throw_fork_in_trash():
     # 3: Go to the GarbageCan.
     GoToObject('GarbageCan')
     # 4: Throw the Fork in the GarbageCan.
-    ThrowObject('Fork', 'GarbageCan')
+    ThrowObject('Fork')
 def throw_spoon_in_trash():
     # 0: SubTask 2: Throw the Spoon in the trash
     # 1: Go to the Spoon.
@@ -111,7 +111,7 @@ def throw_spoon_in_trash():
     # 3: Go to the GarbageCan.
     GoToObject('GarbageCan')
     # 4: Throw the Spoon in the GarbageCan.
-    ThrowObject('Spoon', 'GarbageCan')
+    ThrowObject('Spoon')
 # Execute SubTask 1
 throw_fork_in_trash()
 # Execute SubTask 2

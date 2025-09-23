@@ -1,0 +1,1 @@
+{"task": "Throw the Spatula in the trash", "robot list": [27], "object_states": [{"name": "GarbageCan", "contains": ["Spatula"], "state": null}], "trans": 0, "max_trans": 1}

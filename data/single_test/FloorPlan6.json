@@ -1,0 +1,1 @@
+{"task": "Slice the tomato", "robot list": [2], "object_states": [{"name": "Tomato", "contains": [], "state": "SLICED"}], "trans": 0, "max_trans": 1}
