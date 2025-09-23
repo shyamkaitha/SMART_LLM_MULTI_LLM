@@ -79,7 +79,15 @@ def main():
         for line in lines:
             data = json.loads(line.strip())
             tasks.append(data["task"])
-            robots_list.append([robots.robots[i-1] for i in data["robot list"]])
+            
+            # Convert robot IDs to robot configs with proper naming (matching OpenAI version)
+            task_robots = []
+            for i, r_id in enumerate(data["robot list"]):
+                rob = robots.robots[r_id-1].copy()
+                rob['name'] = f'robot{i+1}'  # Ensure proper robot naming: robot1, robot2, etc.
+                task_robots.append(rob)
+            robots_list.append(task_robots)
+            
             ground_truth_list.append(data["object_states"])
             trans_list.append(data["trans"])
             max_trans_list.append(data["max_trans"])
