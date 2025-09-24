@@ -26,7 +26,7 @@ for obj_gt in ground_truth:
     gcr_tasks += 1
     for obj in objs:
         if state == 'SLICED':
-            if obj_name.lower() in obj["name"].lower() and obj["isSliced"]:
+            if obj_name.lower() in obj["name"].lower() and obj["isSliced"]==True:
                 gcr_complete += 1 
                 
         if state == 'OFF':
@@ -34,20 +34,20 @@ for obj_gt in ground_truth:
                 gcr_complete += 1 
         
         if state == 'ON':
-            if obj_name.lower() in obj["name"].lower() and obj["isToggled"]:
+            if obj_name.lower() in obj["name"].lower() and obj["isToggled"]==True:
                 gcr_complete += 1 
         
         if state == 'HOT':
             # print (obj)
-            if obj_name.lower() in obj["name"].lower() and obj["temperature"] == 'Hot':
+            if obj_name.lower() in obj["name"].lower() and obj["temperature"].lower() == 'hot':
                 gcr_complete += 1 
                 
         if state == 'COOKED':
-            if obj_name.lower() in obj["name"].lower() and obj["isCooked"]:
+            if obj_name.lower() in obj["name"].lower() and obj["isCooked"]==True:
                 gcr_complete += 1 
                 
         if state == 'OPENED':
-            if obj_name.lower() in obj["name"].lower() and obj["isOpen"]:
+            if obj_name.lower() in obj["name"].lower() and obj["isOpen"]==True:
                 gcr_complete += 1 
                 
         if state == 'CLOSED':
@@ -55,11 +55,11 @@ for obj_gt in ground_truth:
                 gcr_complete += 1 
                 
         if state == 'PICKED':
-            if obj_name.lower() in obj["name"].lower() and obj["isPickedUp"]:
+            if obj_name.lower() in obj["name"].lower() and obj["isPickedUp"]==True:
                 gcr_complete += 1 
         
         if state == 'BROKEN':
-            if obj_name.lower() in obj["name"].lower() and obj["isBroken"]:
+            if obj_name.lower() in obj["name"].lower() and obj["isBroken"]==True:
                 gcr_complete += 1 
                 
         if state == 'CLEAN':
@@ -67,7 +67,7 @@ for obj_gt in ground_truth:
                 gcr_complete += 1 
                 
         if state == 'FILLED':
-            if obj_name.lower() in obj["name"].lower() and obj["isFilledWithLiquid"]:
+            if obj_name.lower() in obj["name"].lower() and obj["isFilledWithLiquid"]==True:
                 gcr_complete += 1 
         
         if len(contains) != 0 and obj_name.lower() in obj["name"].lower():
